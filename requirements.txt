@@ -20,3 +20,5 @@ torchaudio
 scikit-surprise
 
 ipykernel
+
+lime
