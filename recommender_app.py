@@ -7,6 +7,14 @@ import numpy as np
 import torch
 import torch.nn as nn
 from gensim.models.word2vec import Word2Vec
+from pathlib import Path
+import argparse
+import warnings
+
+warnings.filterwarnings(
+    action="ignore",
+    category=UserWarning,
+)
 
 def predict_from_text_wtv_batch(text: str) -> np.ndarray:
     text_tokenize = [nltk.word_tokenize(review) for review in text]
@@ -70,6 +78,53 @@ def predict_from_text_wtv(
     return labels
 
 if __name__ == "__main__":
+    # Create an argument parser
+    parser = argparse.ArgumentParser(
+        description="Launch the recommender app"
+    )
+    parser.add_argument(
+        "--word2vec_path",
+        type=str,
+        default="./checkpoints/word2vec.pkl",
+        help="Path to the w2v model",
+    )
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default="./checkpoints/binary_classifier.pth",
+        help="Path to the binary_classifier model",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=7878,
+        help="Port to launch the app on",
+    )
+    # Parse the arguments
+    args = parser.parse_args()
+    port = args.port
+    word2vec_path = Path(args.word2vec_path)
+    model_path = Path(args.model_path)
+
+    # Validate the word2vec model
+    try:
+        model_w2v = pickle.load(word2vec_path.open("rb"))
+    except FileNotFoundError as e:
+        print(f"Error: {word2vec_path} not found")
+        raise e
+    except Exception as e:
+        print(f"Error: {word2vec_path} is not a valid pickle file")
+        raise e
+    # Validate the binary classifier model
+    try:
+        binary_classifier_weights = torch.load(model_path)
+    except FileNotFoundError as e:
+        print(f"Error: {model_path} not found")
+        raise e
+    except Exception as e:
+        print(f"Error: {model_path} is corrupted")
+        raise e
+    
     # Define the device
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -81,11 +136,11 @@ if __name__ == "__main__":
     # Load the w2v model
     nltk.download('stopwords', quiet=True)
     stop_words = stopwords.words('english')
-    model_w2v = pickle.load(open('./notebooks/model_w2v.pkl', 'rb'))
+    
 
     # Load the model
     model = BinaryClassifier(input_shape=100, dropout=0.10)
-    model.load_state_dict(torch.load('./notebooks/model_part2.pt'))
+    model.load_state_dict(binary_classifier_weights)
     model.eval()
 
     demo = gr.Interface(
