@@ -1,24 +1,43 @@
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
+# --- PyTorch ---
+torch==2.0.1
 
-jinja2
+# --- Linear Algebra ---
+numpy==1.24.3
+numba==0.57.1
+sympy==1.12
 
-typing-extensions
-requests
+# --- Machine Learning ---
+scikit-learn==1.2.2
+scipy==1.10.1
 
-nomic
-zipp
+# --- Plot and notebooks utils ---
+matplotlib~=3.7.1
+seaborn~=0.12.2
+tqdm~=4.65.0
+ipykernel~=6.23.2
+ipython~=8.14.0
+ipywidgets~=8.0.6
 
-sympy
+# --- Natural Language Processing ---
+gensim==4.3.1
+nltk==3.8.1
 
-torch
-torchvision
-torchaudio
-scikit-surprise
+# --- Web UI ---
+gradio~=3.35.2
 
-ipykernel
+# --- Type hints ---
+typing_extensions==4.6.3
 
-lime
+# --- Dataset and model repositories ---
+huggingface-hub~=0.15.1
+kaggle~=1.5.13
+
+# --- Explainable AI ---
+lime~=0.2.0.1
+
+# --- Dask distributed computing ---
+# dask==2023.6.1
+# dask-distance==0.2.0
+# dask-glm==0.2.0
+# dask-ml==2023.3.24
+# distributed==2023.6.1
