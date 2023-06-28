@@ -171,4 +171,4 @@ if __name__ == "__main__":
         ],
         allow_flagging="never",
     )
-    demo.launch(share=False)
+    demo.launch(share=True)
